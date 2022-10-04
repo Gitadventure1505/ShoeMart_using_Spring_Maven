@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +25,7 @@ import com.ecommerce.model.Product;
 import com.ecommerce.repository.CategoryRepository;
 import com.ecommerce.service.CategoryService;
 import com.ecommerce.service.ProductService;
+import com.ecommerce.service.UserService;
 
 @Controller
 public class AdminController 
@@ -35,11 +39,53 @@ public class AdminController
 	@Autowired
 	public ProductService productService;
 	
+	@Autowired
+	public UserService userservice;
+	
 	@GetMapping("/admin")
 	public String adminHome()
 	{
 		return "adminHome";
 	}
+	
+	@GetMapping("/admin/listofusers")
+	public String listOfUsers(@RequestParam(value = "Name", required = false)String name, Model model)
+	{
+		
+		
+		
+		if(name == null)
+		{
+			model.addAttribute("allusers", userservice.getAllUsers());
+			
+				
+		}
+		else
+		{
+			model.addAttribute("allusers",userservice.getUsersByFirstNameAndLastName(name, name));
+			
+		}
+			
+		
+		
+		return "listofusers";
+		}
+		
+		//name = null;
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
 	
 	@GetMapping("/admin/categories")
 	public String getcat(Model model)
