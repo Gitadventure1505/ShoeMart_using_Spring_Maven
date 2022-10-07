@@ -25,26 +25,13 @@ public class UserService
 	public List<User> getUsersByFirstNameAndLastName(String firstname, String lastname)
 	{
 		List<User> users = new ArrayList<User>();
-		users.addAll(userrepository.findByFirstName(firstname));
-		users.addAll(userrepository.findByLastName(lastname));
+		users.addAll(userrepository.findByFirstNameContaining(firstname));
+		users.addAll(userrepository.findByLastNameContaining(lastname));
 		return users;
 	}
 	
-	public List<User> getUsersByFirstname(String firstname)
-	{
-		
+	
 
-		return userrepository.findByFirstName(firstname);
-		
-	}
-	
-	public List<User> getUsersByLastname(String lastname)
-	{
-
-		return userrepository.findByLastName(lastname);
-	}
-	
-	
 	
 	
 	

@@ -54,12 +54,18 @@ public class LoginController
 		userRepository.save(user);
 		request.login(user.getEmail(), password);
 		return "redirect:/";
-		
-		
-		
-		
-		
+				
 	}
+	
+	
+	 @GetMapping("/accessDenied")
+	 public String accessDenied()
+	 {
+		 return "accessDenied";
+	 }
+	 
+	 
+	 
 	
 	
 }

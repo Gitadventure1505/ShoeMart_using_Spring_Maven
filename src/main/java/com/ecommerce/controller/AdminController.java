@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ import com.ecommerce.model.Category;
 import com.ecommerce.model.Product;
 import com.ecommerce.repository.CategoryRepository;
 import com.ecommerce.service.CategoryService;
+import com.ecommerce.service.OrdersplacedService;
 import com.ecommerce.service.ProductService;
 import com.ecommerce.service.UserService;
 
@@ -42,6 +44,11 @@ public class AdminController
 	@Autowired
 	public UserService userservice;
 	
+	
+	@Autowired
+	OrdersplacedService ordersplacedservice;
+	
+	
 	@GetMapping("/admin")
 	public String adminHome()
 	{
@@ -52,38 +59,42 @@ public class AdminController
 	public String listOfUsers(@RequestParam(value = "Name", required = false)String name, Model model)
 	{
 		
-		
-		
 		if(name == null)
 		{
-			model.addAttribute("allusers", userservice.getAllUsers());
-			
-				
+			model.addAttribute("allusers", userservice.getAllUsers());		
 		}
 		else
 		{
 			model.addAttribute("allusers",userservice.getUsersByFirstNameAndLastName(name, name));
-			
 		}
-			
-		
-		
 		return "listofusers";
 		}
-		
-		//name = null;
-		
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
+	
+	@GetMapping("/admin/purchasereport")
+	public String getPurchaseReport
+		   (@RequestParam(value = "startdate", required = false)String a, 
+			@RequestParam(value = "enddate", required = false)String b,
+			Model model)
+	{
+		Date startdate = null;; 
+		Date enddate = null;
+		
+		
+		System.out.println(a+b);
+		if(startdate == null)
+		{
+			model.addAttribute("allorders", ordersplacedservice.getAllOrders());
+		}
+		else
+		{
+			model.addAttribute("allorders", ordersplacedservice.getAllOrdersInbetween(startdate, enddate));
+		}
+	
+		return "purchaseReport"	;
+	}
+	
+	
 	
 	
 	
@@ -219,6 +230,10 @@ public class AdminController
 			 
 		return "productsAdd";
 	}
+	
+	
+
+	
 	
 	
 }

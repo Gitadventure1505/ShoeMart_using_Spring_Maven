@@ -57,6 +57,9 @@ protected void configure(HttpSecurity http) throws Exception {
 	
 	http.headers().frameOptions().disable();
 	
+	
+	http.exceptionHandling().accessDeniedPage("/accessDenied");
+	
 }
 
 @Bean
