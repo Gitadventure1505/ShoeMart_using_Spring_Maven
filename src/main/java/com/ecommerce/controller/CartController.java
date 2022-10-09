@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.ecommerce.dto.OrdersplacedDTO;
 import com.ecommerce.dto.ProductDTO;
 import com.ecommerce.global.GlobalData;
+import com.ecommerce.model.CustomUserDetail;
 import com.ecommerce.model.Ordersplaced;
 import com.ecommerce.model.Product;
+import com.ecommerce.model.User;
 import com.ecommerce.service.OrdersplacedService;
 import com.ecommerce.service.ProductService;
 
@@ -66,6 +69,8 @@ public class CartController
 	@GetMapping("/checkout")
 	public String checkout(Model model)
 	{
+
+		
 		model.addAttribute("ordersplacedDTO", new OrdersplacedDTO());
 		model.addAttribute("total", GlobalData.cart.stream().mapToDouble(Product::getPrice).sum());
 		return "checkout";
@@ -78,25 +83,36 @@ public class CartController
 	@PostMapping("/checkout")
 	public String payment(@ModelAttribute("ordersplacedDTO") OrdersplacedDTO ordersplacedDTO) 
 	{
-		 Long datetime = System.currentTimeMillis();
-		 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		/*
+		 * Long datetime = System.currentTimeMillis(); SimpleDateFormat dateFormat = new
+		 * SimpleDateFormat("dd/MM/yyyy");
+		 * 
+		 * 
+		 * //java.sql.Date sqldate = new
+		 * java.sql.Date(Integer.parseInt(arr[0]),Integer.parseInt(arr[1]),Integer.
+		 * parseInt(arr[2])); // ordersplacedDTO.setOrderplacedtime(new Date(datetime));
+		 * 
+		 * 
+		 * // ordersplacedDTO.setOrderplacedtime(new Date(datetime));
+		 */	
 		
-		 
-		//java.sql.Date sqldate = new java.sql.Date(Integer.parseInt(arr[0]),Integer.parseInt(arr[1]),Integer.parseInt(arr[2]));
-		 ordersplacedDTO.setOrderplacedtime(new Date(datetime));
-		 
-		 
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = (User) principal;
+		CustomUserDetail customeuserdetail = new CustomUserDetail(user);
+	
+		
+		
 		 Ordersplaced ordersplaced = new Ordersplaced();
 		 ordersplaced.setAdditionalinfo(ordersplacedDTO.getAdditionalinfo());
 		 ordersplaced.setAddress1(ordersplacedDTO.getAddress1());
 		 ordersplaced.setAddress2(ordersplacedDTO.getAddress2());
 		 ordersplaced.setAmountpayable(ordersplacedDTO.getAmountpayable());
 		 ordersplaced.setCity(ordersplacedDTO.getCity());
-		 ordersplaced.setEmail(ordersplacedDTO.getEmail());
+		 ordersplaced.setEmail(customeuserdetail.getEmail());
 		 ordersplaced.setFirstname(ordersplacedDTO.getFirstname());
 		 ordersplaced.setLastname(ordersplacedDTO.getLastname());
 		 ordersplaced.setId(ordersplacedDTO.getId());
-		 ordersplaced.setOrderplacedtime(ordersplacedDTO.getOrderplacedtime());
+		// ordersplaced.setOrderplacedtime(ordersplacedDTO.getOrderplacedtime());
 		 ordersplaced.setPhone(ordersplacedDTO.getPhone());
 		 ordersplaced.setPostcode(ordersplacedDTO.getPostcode());
 		 
@@ -105,10 +121,23 @@ public class CartController
 		 
 		 return "PaymentSuccessful";
 
-		 
 
 	}
 	
+	
+	@GetMapping("/orderhistory")
+	public String orderhistory(Model model)
+	{
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = (User) principal;
+		CustomUserDetail customeuserdetail = new CustomUserDetail(user);
+	
+		
+		
+		model.addAttribute("allorders", ordersplacedservice.getAllOrdersWithMail(customeuserdetail.getEmail()));
+		
+		return "orderhistory";
+	}
 
 	
 

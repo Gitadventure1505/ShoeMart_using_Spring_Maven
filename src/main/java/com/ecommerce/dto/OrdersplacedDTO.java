@@ -1,5 +1,6 @@
 package com.ecommerce.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class OrdersplacedDTO 
@@ -17,7 +18,7 @@ private int id;
 	private String email;
 	private String additionalinfo;
 	private double amountpayable;
-	private Date orderplacedtime;
+	private LocalDateTime orderplacedtime;
 	
 	
 	
@@ -27,7 +28,7 @@ private int id;
 	
 	
 	public OrdersplacedDTO(int id, String firstname, String lastname, String address1, String address2, long postcode,
-			String city, long phone, String email, String additionalinfo, double amountpayable, Date orderplacedtime) {
+			String city, long phone, String email, String additionalinfo, double amountpayable, LocalDateTime orderplacedtime) {
 		super();
 		this.id = id;
 		this.firstname = firstname;
@@ -108,12 +109,15 @@ private int id;
 	public void setAmountpayable(double amountpayable) {
 		this.amountpayable = amountpayable;
 	}
-	public Date getOrderplacedtime() {
+	
+	public LocalDateTime getOrderplacedtime() {
 		return orderplacedtime;
 	}
-	public void setOrderplacedtime(Date orderplacedtime) {
+
+	public void setOrderplacedtime(LocalDateTime orderplacedtime) {
 		this.orderplacedtime = orderplacedtime;
 	}
+	 
 	
 	
 	

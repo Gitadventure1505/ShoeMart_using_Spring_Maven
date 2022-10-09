@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,17 +79,26 @@ public class AdminController
 			@RequestParam(value = "enddate", required = false)String b,
 			Model model)
 	{
-		Date startdate = null;; 
-		Date enddate = null;
-		
-		
-		System.out.println(a+b);
-		if(startdate == null)
+
+		if(a == null)
 		{
 			model.addAttribute("allorders", ordersplacedservice.getAllOrders());
 		}
 		else
 		{
+
+			
+			String[] arrA = a.split("-");
+			String[] arrB = b.split("-");
+			
+			
+			LocalDateTime startdate = LocalDateTime.of(Integer.parseInt(arrA[0]), Integer.parseInt(arrA[1]), Integer.parseInt(arrA[2]), 00, 00);
+			LocalDateTime enddate = LocalDateTime.of(Integer.parseInt(arrB[0]), Integer.parseInt(arrB[1]), Integer.parseInt(arrB[2]), 23, 59);
+					
+			
+	
+
+			System.out.println(a+b);
 			model.addAttribute("allorders", ordersplacedservice.getAllOrdersInbetween(startdate, enddate));
 		}
 	

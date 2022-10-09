@@ -1,7 +1,8 @@
 package com.ecommerce.service;
 
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,16 @@ public class OrdersplacedService
 		
 	}
 	
-	public List<Ordersplaced> getAllOrdersInbetween(Date startdate, Date enddate)
+	public List<Ordersplaced> getAllOrdersWithMail(String email)
+	{
+		
+		return ordersplacedrepository.findByEmail(email);
+		
+	}
+	
+	
+	
+	public List<Ordersplaced> getAllOrdersInbetween(LocalDateTime startdate, LocalDateTime enddate)
 	{
 		
 		return ordersplacedrepository.findByorderplacedtimeBetween(startdate, enddate);
